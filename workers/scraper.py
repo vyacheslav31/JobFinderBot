@@ -17,8 +17,8 @@ class JobScraper():
 
     def __init__(self):
         load_dotenv()
-        self.app_id = os.getenv('APP_ID')
-        self.app_key = os.getenv('APP_KEY')
+        self.app_id = os.getenv('ADZUNA_APP_ID')
+        self.app_key = os.getenv('ADZUNA_APP_KEY')
         dbmanager = DatabaseManager()
 
     def search(self, country, results_qty, query):
