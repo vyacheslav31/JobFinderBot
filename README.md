@@ -14,7 +14,7 @@ An .env file must be present in the root directory of this project containing yo
 # License
 <i>MIT License
 
-Copyright (c) 2019 Chetan Kini
+Copyright (c) 2019 Vyacheslav Gorbov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
