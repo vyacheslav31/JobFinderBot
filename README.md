@@ -1,4 +1,4 @@
-## Work in Progress
+### <i>Work in Progress</i>
 # JobFinderBot
 JobFinderBot is a discord bot that helps you look for job on websites like Indeed and Monster. 
 
@@ -14,7 +14,7 @@ An .env file must be present in the root directory of this project containing yo
 # License
 <i>MIT License
 
-Copyright (c) 2019 Vyacheslav Gorbov
+Copyright (c) 2021 Vyacheslav Gorbov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
