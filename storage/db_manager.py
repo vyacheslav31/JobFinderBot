@@ -6,7 +6,7 @@ from pathlib import Path
 class DatabaseManager():
 
     def __init__(self):
-        conn = sqlite3.connect('registry.db')
+        conn = sqlite3.connect('storage/registry.db')
         cursor = conn.cursor()
 
         #================#
@@ -16,7 +16,7 @@ class DatabaseManager():
             """CREATE TABLE IF NOT EXISTS users (
                 id integer PRIMARY KEY,
                 name text NOT NULL,
-                country text,
+                country text
                 )"""
         )
 
@@ -28,7 +28,6 @@ class DatabaseManager():
             post_date text,
             latitude text,
             longitude text,
-            url text,
-            
+            url text
             )""")
         pass
