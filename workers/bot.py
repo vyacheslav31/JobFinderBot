@@ -1,7 +1,7 @@
 import discord
 from discord import channel
 from discord.ext.commands import bot
-from .scraper import JobScraper
+from .request_manager
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os

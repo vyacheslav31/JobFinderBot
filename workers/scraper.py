@@ -2,11 +2,14 @@ from datetime import datetime
 import requests
 import json
 import os
-from storage.db_manager import DatabaseManager
 from bs4 import BeautifulSoup as bsoup
 from dotenv import load_dotenv
 
 class JobScraper():
+    """
+    The purpose of this class is to make various API requests to obtain job postings.
+    """
+
     _base_url = "http://api.adzuna.com/v1/api/jobs/{country}/search/1?" \
         "app_id={app_id}" \
         "&app_key={app_key}" \
@@ -21,7 +24,7 @@ class JobScraper():
 
     def user_search(self, country, results_qty, query):
         """
-        User initiated API search will return the results based on their query.
+        User-initiated API search which will return the results based on a query.
         """
         response = requests.get(self._base_url.format(
             country=country,
