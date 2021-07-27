@@ -24,8 +24,7 @@ class DatabaseManager():
             """
             CREATE TABLE IF NOT EXISTS searches (
                 search_id integer PRIMARY KEY,
-                keywords text,
-                
+                keywords text
                 );
             """
         )
@@ -35,6 +34,7 @@ class DatabaseManager():
             parent_search_id integer NOT NULL,
             title text,
             company text,
+            description text,
             location text,
             post_date text,
             latitude text,
@@ -45,8 +45,6 @@ class DatabaseManager():
             FOREIGN KEY(parent_search_id) REFERENCES searches(search_id)
             );""")
 
-        pass
-    
     def trim_db(self):
-        """Used for chronologically trimming DB size to prevent overuse"""
+        """Used for periodically trimming DB size to prevent storage overuse."""
         pass

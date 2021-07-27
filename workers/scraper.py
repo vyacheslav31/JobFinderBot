@@ -21,6 +21,7 @@ class JobScraper():
         load_dotenv()
         self.app_id = os.getenv('ADZUNA_APP_ID')
         self.app_key = os.getenv('ADZUNA_APP_KEY')
+        self.html_parser = "html.parser"
 
     def user_search(self, country, results_qty, query):
         """
@@ -41,8 +42,9 @@ class JobScraper():
         for result in results:
             job_post = {
                 "ID": result["id"],
-                "Title": result["title"],
-                "Company": result["company"]["display_name"],
+                "Title": bsoup(result["title"], self.html_parser).text,
+                "Company": bsoup(result["company"]["display_name"], self.html_parser).text,
+                "Description": bsoup(result["description"], self.html_parser).text,
                 "Location": result["location"]["display_name"],
                 "Post Date": result["created"],
                 "Latitude": result["latitude"],
