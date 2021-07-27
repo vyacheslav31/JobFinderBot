@@ -23,7 +23,7 @@ class JobScraper():
         self.app_key = os.getenv('ADZUNA_APP_KEY')
         self.html_parser = "html.parser"
 
-    def user_search(self, country, results_qty, query):
+    def get_jobs(self, country, results_qty, query):
         """
         User-initiated API search which will return the results based on a query.
         """
@@ -32,7 +32,7 @@ class JobScraper():
             app_id=self.app_id,
             app_key=self.app_key,
             results_qty=results_qty,
-            query=query
+            query=query.replace(" ", "%20")
         ))
         
         results = json.loads(response.text)["results"]
@@ -54,7 +54,7 @@ class JobScraper():
             }
             job_posts.append(job_post)
             
-        return job_posts
+        return job_posts[0]
 
         
     def __cron_search(self):

@@ -1,30 +1,30 @@
-import discord
 from discord import channel
-from discord.ext.commands import bot
-from .request_manager
-from discord.ext import commands, tasks
+from .request_manager import RequestManager
+from discord.ext import commands
 from dotenv import load_dotenv
 import os
 
-class JobFinderBot():
-    client = commands.Bot(command_prefix="/jfb ")
+class JobFinderBot(commands.Bot):
+    cmd_prefix = "/jf "
     
     def __init__(self):
+        super().__init__(command_prefix=self.cmd_prefix)
         load_dotenv()
-        self.channel = self.client.get_channel(int(os.getenv('CHANNEL')))
-        self.scraper = JobScraper()
+        self.channel = self.get_channel(int(os.getenv('CHANNEL')))
+        self.request_manager = RequestManager()
         self.token = os.getenv('TOKEN')
-        
-        
-    @client.event
-    async def on_ready():
+        self.register_commands()
+
+    async def on_ready(self):
         print("Bot is now active.")
-        
-    @client.command(pass_context=True)
-    async def job(self, *args):
-        await self.channel.send(content="Hello")
     
-    def start(self):
-        self.client.run(self.token)
+    def register_commands(self):
+        @self.command(pass_context=True)
+        async def job(ctx):
+            message = self.request_manager.make_request()
+            await ctx.channel.send(embed=message)
+    
+    def turn_on(self):
+        self.run(self.token)
         
     
