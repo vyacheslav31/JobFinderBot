@@ -20,6 +20,7 @@ class RequestManager():
                 url="https://www.adzuna.com",
                 icon_url="https://i.ibb.co/ryxpxNC/adzuna-logo.png"
             )
+            embed.set_image()
             embed.add_field(name="Company",
                             value=response["Company"],
                             inline=False)
