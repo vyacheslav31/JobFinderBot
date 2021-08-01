@@ -1,26 +1,31 @@
 import sqlite3
-import os
-from pathlib import Path
 from sqlite3 import OperationalError
 import logging
 
 
 class DatabaseManager():
-    logging_format = '[%(asctime)s] %(levelname)s - %(filename)s:%(funcName)s - %(message)s'
-    logging.basicConfig(filename='logs/db.log',
-                        datefmt='%d-%b-%y %H:%M:%S',
-                        level=logging.INFO,
-                        format=logging_format)
 
     def __init__(self):
-        conn = sqlite3.connect('storage/registry.db')
-        cursor = conn.cursor()
+        self.conn = sqlite3.connect('storage/registry.db')
+        self.cursor = self.conn.cursor()
+        self.setup_db()
 
+    def trim_db(self):
+        """Used for periodically trimming DB size to prevent storage overuse."""
+        pass
+    def insert_posts(self):
+        pass
+    def insert_user(self):
+        pass
+    def insert_searches(self):
+        pass
+    def get_posts(self):
+        pass
+    def user_exists(self):
+        pass
+    def setup_db(self):
         try:
-            #================#
-            # SETUP DATABASE #
-            #================#
-            cursor.execute(
+            self.cursor.execute(
                 """CREATE TABLE IF NOT EXISTS users (
                     id integer PRIMARY KEY,
                     name text NOT NULL,
@@ -28,7 +33,7 @@ class DatabaseManager():
                     );"""
             )
 
-            cursor.execute(
+            self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS searches (
                     search_id integer PRIMARY KEY,
@@ -37,7 +42,7 @@ class DatabaseManager():
                 """
             )
 
-            cursor.execute("""CREATE TABLE IF NOT EXISTS job_postings (
+            self.cursor.execute("""CREATE TABLE IF NOT EXISTS job_postings (
                 id integer PRIMARY KEY,
                 parent_search_id integer NOT NULL,
                 title text,
@@ -54,7 +59,7 @@ class DatabaseManager():
                 );""")
         except OperationalError as ex:
             logging.exception(ex)
-
-    def trim_db(self):
-        """Used for periodically trimming DB size to prevent storage overuse."""
-        pass
+        
+    
+    
+    

@@ -4,6 +4,7 @@
 
 # Example JSON Response from Adzuna API
 example_response.json
+.idea/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
