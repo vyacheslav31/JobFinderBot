@@ -2,8 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
 
-# Example JSON Response from Adzuna API
+# Project-specific JSON files
 example_response.json
+storage/users.json
 .idea/
 
 ### Python ###

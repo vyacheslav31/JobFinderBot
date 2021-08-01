@@ -1,17 +1,18 @@
 import sqlite3
 from sqlite3 import OperationalError
+import json
 import logging
 
 
 class DatabaseManager():
 
     def __init__(self):
-        self.conn = sqlite3.connect('storage/registry.db')
+        self.conn = sqlite3.connect(":memory:")
         self.cursor = self.conn.cursor()
         self.setup_db()
 
     def trim_db(self):
-        """Used for periodically trimming DB size to prevent storage overuse."""
+        """Used for periodically trimming DB size to prevent memory overuse / overflow."""
         pass
     def insert_posts(self):
         pass
@@ -25,14 +26,7 @@ class DatabaseManager():
         pass
     def setup_db(self):
         try:
-            self.cursor.execute(
-                """CREATE TABLE IF NOT EXISTS users (
-                    id integer PRIMARY KEY,
-                    name text NOT NULL,
-                    country text
-                    );"""
-            )
-
+            self.user_file = open('storage/users.json', 'r+')
             self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS searches (
