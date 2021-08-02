@@ -39,6 +39,12 @@ class RequestManager():
                             inline=False)
             return embed
         elif 1 < qty <= 5:
-            return discord.Embed(title="Quantity Error").add_field(name='Message', value="Still currently implementing multi-search")
+            return discord.Embed(title="Quantity Error").add_field(name='Message', value="Still currently "
+                                                                                         "implementing multi-search")
         else:
-            return discord.Embed(title="Quantity Error").add_field(name='Message', value="You may only request between 1 and 5 job postings.")
+            return discord.Embed(title="Quantity Error").add_field(name='Message', value="You may only request "
+                                                                                         "between 1 and 5 job "
+                                                                                         "postings.")
+
+    def __cron_search(self):
+        return None

@@ -59,7 +59,7 @@ class JobFinderBot(commands.Bot):
             await ctx.channel.send(embed=message)
         
         @self.command(pass_context=True)
-        async def set(ctx):
+        async def register(ctx):
             pass
 
     def turn_on(self) -> None:

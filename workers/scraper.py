@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup as bsoup
 from dotenv import load_dotenv
 
 
+
 class JobScraper():
     """
     The purpose of this class is to make various API requests to obtain job postings.
@@ -56,9 +57,3 @@ class JobScraper():
             job_posts.append(job_post)
 
         return job_posts[0]
-
-    def __cron_search(self):
-        """
-        Application-iniated search which will fill the database preemptively to minimize API calls.
-        """
-        return None
