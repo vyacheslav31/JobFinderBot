@@ -57,7 +57,7 @@ class JobFinderBot(commands.Bot):
             message = self.request_manager.make_request(
                 region, quantity, query)
             await ctx.channel.send(embed=message)
-        
+
         @self.command(pass_context=True)
         async def register(ctx):
             pass

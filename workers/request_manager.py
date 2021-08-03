@@ -4,7 +4,8 @@ import discord
 
 
 class RequestManager():
-
+    # Google Maps Format Query
+    # https://www.google.com/maps/search/?api=1&query=<lat>,<lng>
     def __init__(self) -> None:
         self.db_manager = DatabaseManager()
         self.scraper = JobScraper()
@@ -14,13 +15,17 @@ class RequestManager():
             response = self.scraper.get_jobs(rgn, qty, qry)
             embed = discord.Embed(title=response["Title"],
                                   url=response["URL"],
-                                  color=0x542d7c)
+                                  color=0x20873c)
             embed.set_author(
                 name="Adzuna",
                 url="https://www.adzuna.com",
                 icon_url="https://i.ibb.co/ryxpxNC/adzuna-logo.png"
             )
-            embed.set_image()
+            embed.set_thumbnail(
+                url=f"https://static-maps.yandex.ru/1.x/?lang=en-US&ll={response['Longitude']},{response['Latitude']}&z=13&l=map&size=100,100")
+            embed.add_field(name="Map",
+                            value=f"[Click Here](https://www.google.com/maps/search/?api=1&query={response['Latitude']},{response['Longitude']})",
+                            inline=True)
             embed.add_field(name="Company",
                             value=response["Company"],
                             inline=False)

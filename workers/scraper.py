@@ -6,18 +6,17 @@ from bs4 import BeautifulSoup as bsoup
 from dotenv import load_dotenv
 
 
-
 class JobScraper():
     """
     The purpose of this class is to make various API requests to obtain job postings.
     """
 
     _base_url = "http://api.adzuna.com/v1/api/jobs/{country}/search/1?" \
-        "app_id={app_id}" \
-        "&app_key={app_key}" \
-        "&results_per_page={results_qty}"\
-        "&what={query}"\
-        "&content-type=application/json"
+                "app_id={app_id}" \
+                "&app_key={app_key}" \
+                "&results_per_page={results_qty}" \
+                "&what={query}" \
+                "&content-type=application/json"
 
     def __init__(self):
         load_dotenv()
