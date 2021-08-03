@@ -1,10 +1,9 @@
+import logging
 import sqlite3
 from sqlite3 import OperationalError
-import json
-import logging
 
 
-class DatabaseManager():
+class DatabaseManager:
 
     def __init__(self):
         self.conn = sqlite3.connect(":memory:")
@@ -15,13 +14,19 @@ class DatabaseManager():
         """Used for periodically trimming DB size to prevent memory overuse / overflow."""
         pass
 
-    def insert_posts(self):
-        pass
+    def insert_posts(self, posts):
+        for post in posts:
+            self.cursor.execute(
+                """
+                INSERT INTO job_postings(id, parent_)
+                """
+            )
+        
 
     def insert_user(self):
         pass
 
-    def insert_searches(self):
+    def insert_searche(self):
         pass
 
     def get_posts(self):

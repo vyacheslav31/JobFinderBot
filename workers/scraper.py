@@ -1,12 +1,12 @@
-from datetime import datetime
-import requests
 import json
 import os
+
+import requests
 from bs4 import BeautifulSoup as bsoup
 from dotenv import load_dotenv
 
 
-class JobScraper():
+class JobScraper:
     """
     The purpose of this class is to make various API requests to obtain job postings.
     """
