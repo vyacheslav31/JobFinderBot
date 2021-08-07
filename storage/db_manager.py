@@ -14,24 +14,24 @@ class DatabaseManager:
         """Used for periodically trimming DB size to prevent memory overuse / overflow."""
         pass
 
-    def insert_posts(self, posts):
-        for post in posts:
-            self.cursor.execute("INSERT INTO job_postings VALUES (:id, :parent_search_id, :title, :company, "
-                                ":description, "
-                                ":location, :post_date, :latitude, :longitude, :url, :category);",
-                                {
-                                    'id': post["ID"],
-                                    'title': post['Title'],
-                                    'company': post["Company"],
-                                    'description': post['Description'],
-                                    'location': post["Location"],
-                                    'post_date': post["Post Date"],
-                                    'latitude': post["Latitude"],
-                                    'longitude': post["Longitude"],
-                                    'url': post["URL"],
-                                    'category': post["Category"]
-                                }
-                                )
+    def insert_posts(self, post):
+        self.cursor.execute("INSERT INTO job_postings VALUES (:id, :parent_search_id, :title, :company, "
+                            ":description, "
+                            ":location, :post_date, :latitude, :longitude, :url, :category);",
+                            {
+                                'id': post["ID"],
+                                'parent_search_id': 1,
+                                'title': post['Title'],
+                                'company': post["Company"],
+                                'description': post['Description'],
+                                'location': post["Location"],
+                                'post_date': post["Post Date"],
+                                'latitude': post["Latitude"],
+                                'longitude': post["Longitude"],
+                                'url': post["URL"],
+                                'category': post["Category"]
+                            }
+                            )
 
     def insert_user(self, user_id, country):
         self.cursor.execute("INSERT INTO users VALUES (:user_id, :country);", {
