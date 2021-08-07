@@ -1,4 +1,3 @@
-from _typeshed import Self
 import discord
 
 from storage.db_manager import DatabaseManager
@@ -41,3 +40,6 @@ class RequestManager:
 
     def post_obtainable_from_db():
         pass
+    
+    def user_exists(self, user_id):
+        return self.db_manager.user_exists(user_id)

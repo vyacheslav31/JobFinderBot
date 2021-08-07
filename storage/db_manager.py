@@ -18,7 +18,7 @@ class DatabaseManager:
         for post in posts:
             self.cursor.execute("INSERT INTO job_postings VALUES (:id, :parent_search_id, :title, :company, "
                                 ":description, "
-                                ":location, :post_date, :latitude, :longitude, :url, :category)",
+                                ":location, :post_date, :latitude, :longitude, :url, :category);",
                                 {
                                     'id': post["ID"],
                                     'title': post['Title'],
@@ -34,14 +34,14 @@ class DatabaseManager:
                                 )
 
     def insert_user(self, user_id, country):
-        self.cursor.execute("INSERT INTO users VALUES (:user_id, :country)", {
+        self.cursor.execute("INSERT INTO users VALUES (:user_id, :country);", {
             'user_id': user_id,
             'country': country
         })
 
     def get_user_region(self, user_id):
         self.cursor.execute(
-            f"SELECT country FROM users WHERE user_id = {user_id}")
+            f"SELECT country FROM users WHERE user_id = {user_id};")
 
     def insert_searches(self):
         pass
@@ -49,8 +49,8 @@ class DatabaseManager:
     def get_posts(self):
         pass
 
-    def user_exists(self):
-        pass
+    def user_exists(self, user_id):
+        return self.cursor.execute(f"SELECT EXISTS(SELECT 1 FROM users WHERE user_id={user_id} LIMIT 1);").fetchone()[0]
 
     def setup_db(self):
         try:
@@ -58,7 +58,7 @@ class DatabaseManager:
                 """
                 CREATE TABLE IF NOT EXISTS users (
                   user_id integer PRIMARY KEY,
-                  country text,
+                  country text
                 );
                 """
             )

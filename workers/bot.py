@@ -44,25 +44,6 @@ class JobFinderBot(commands.Bot):
                      "&l=map&size={width},{height}"
     map_base_url = "https://www.google.com/maps/search/?api=1" \
                    "&query={latitude},{longitude}"
-    register_msg = f"""
-                Please enter your country by selecting its numerical position on this list
-                1. {ADZUNA_REGIONS[0]}
-                2. {ADZUNA_REGIONS[1]}
-                3. {ADZUNA_REGIONS[2]}
-                4. {ADZUNA_REGIONS[3]}
-                5. {ADZUNA_REGIONS[4]}
-                6. {ADZUNA_REGIONS[5]}
-                7. {ADZUNA_REGIONS[6]}
-                8. {ADZUNA_REGIONS[7]}
-                9. {ADZUNA_REGIONS[8]}
-                10. {ADZUNA_REGIONS[9]}
-                11. {ADZUNA_REGIONS[10]}
-                12. {ADZUNA_REGIONS[11]}
-                13. {ADZUNA_REGIONS[12]}
-                14. {ADZUNA_REGIONS[13]}
-                15. {ADZUNA_REGIONS[14]}
-                16. {ADZUNA_REGIONS[15]}
-                """
 
     logging_format = '[%(asctime)s] %(levelname)s - %(filename)s:%(funcName)s - %(message)s'
     logging.basicConfig(filename='logs/bot.log',
@@ -140,21 +121,31 @@ class JobFinderBot(commands.Bot):
         async def register(ctx):
             channel = ctx.channel
             user = ctx.message.author
-            await channel.send(self.register_msg)
+            register_msg = "Please enter your country by selecting its numerical position on this list\n"
+            countries_list = list(self.ADZUNA_REGIONS)
+            
+            for i, country in enumerate(countries_list):
+                register_msg += f"{i+1}. {country} \n"
+                
+            await channel.send(register_msg)
 
             def validate_country(country_num):
-                return 0 <= (country_num - 1) < len(self.ADZUNA_REGIONS)
+                try:
+                    return 0 <= (int(country_num.content) - 1) < len(countries_list)
+                except ValueError:
+                    return False
 
             try:
-                user_ctry = await self.wait_for('message', check=self.validate_country, timeout=8.0)
+                user_ctry = await self.wait_for('message', check=validate_country, timeout=8.0)
+                
+                if not self.request_manager.user_exists(user.id):
+                    self.request_manager.add_user(user.id, int(user_ctry.content))
+                    await channel.send(f"Grats! We've registered {user.name} .")
+                else:
+                    await channel.send("Sorry. Look's like you're already registered.")
             except asyncio.TimeoutError:
                 await channel.send("Timed-out. Please enter your selection within 8s.")
 
-            if user_ctry != None and user_ctry != False:
-                self.request_manager.add_user(user.id, user_ctry)
-                channel.send(f"Grats! We've registered {user.name} .")
-            else:
-                channel.send("Not a valid choice.")
 
     def turn_on(self) -> None:
         self.run(self.token)
