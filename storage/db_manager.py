@@ -38,9 +38,10 @@ class DatabaseManager:
             'user_id': user_id,
             'country': country
         })
-    
+
     def get_user_region(self, user_id):
-        self.cursor.execute(f"SELECT country FROM users WHERE user_id = {user_id}")
+        self.cursor.execute(
+            f"SELECT country FROM users WHERE user_id = {user_id}")
 
     def insert_searches(self):
         pass

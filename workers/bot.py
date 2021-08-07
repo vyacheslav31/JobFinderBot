@@ -121,7 +121,6 @@ class JobFinderBot(commands.Bot):
                         value=post["Description"],
                         inline=False)
         return embed
-    
 
     def register_commands(self) -> None:
         """
@@ -142,27 +141,20 @@ class JobFinderBot(commands.Bot):
             channel = ctx.channel
             user = ctx.message.author
             await channel.send(self.register_msg)
-            
+
             def validate_country(country_num):
                 return 0 <= (country_num - 1) < len(self.ADZUNA_REGIONS)
-            
+
             try:
                 user_ctry = await self.wait_for('message', check=self.validate_country, timeout=8.0)
             except asyncio.TimeoutError:
                 await channel.send("Timed-out. Please enter your selection within 8s.")
-                
+
             if user_ctry != None and user_ctry != False:
                 self.request_manager.add_user(user.id, user_ctry)
                 channel.send(f"Grats! We've registered {user.name} .")
             else:
                 channel.send("Not a valid choice.")
-                
-            
-                
-            
-            
-            
-            
 
     def turn_on(self) -> None:
         self.run(self.token)

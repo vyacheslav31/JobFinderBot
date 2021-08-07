@@ -4,8 +4,9 @@ import discord
 from storage.db_manager import DatabaseManager
 from .scraper import JobScraper
 
-#NOTE: So far this class seems rather redundant. Might have to refactor
+# NOTE: So far this class seems rather redundant. Might have to refactor
 # all the functionality in this class into one of the other workers.
+
 
 class RequestManager:
 
@@ -34,10 +35,9 @@ class RequestManager:
 
     def add_posts(self, posts):
         self.db_manager.insert_posts(posts)
-    
+
     def add_user(self, user_id, country):
         self.db_manager.insert_user(user_id, country)
-    
+
     def post_obtainable_from_db():
-        
-    
+        pass
