@@ -40,8 +40,8 @@ class DatabaseManager:
         })
 
     def get_user_region(self, user_id):
-        self.cursor.execute(
-            f"SELECT country FROM users WHERE user_id = {user_id};")
+        return self.cursor.execute(
+            f"SELECT country FROM users WHERE user_id = {user_id};").fetchone()[0]
 
     def insert_searches(self):
         pass
@@ -57,8 +57,8 @@ class DatabaseManager:
             self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS users (
-                  user_id integer PRIMARY KEY,
-                  country text
+                user_id integer PRIMARY KEY,
+                country text
                 );
                 """
             )
@@ -66,14 +66,15 @@ class DatabaseManager:
             self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS searches (
-                    search_id integer PRIMARY KEY AUTOINCREMENT,
-                    keywords text
-                    );
+                search_id integer PRIMARY KEY AUTOINCREMENT,
+                keywords text
+                );
                 """
             )
 
             self.cursor.execute(
-                """CREATE TABLE IF NOT EXISTS job_postings (
+                """
+                CREATE TABLE IF NOT EXISTS job_postings (
                 id integer PRIMARY KEY,
                 parent_search_id integer NOT NULL,
                 title text,
@@ -92,10 +93,11 @@ class DatabaseManager:
             self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS user_post_views (
-                  user_id integer NOT NULL,
-                  job_post_id integer NOT NULL,
-                  FOREIGN KEY(user_id) REFERENCES users(user_id),
-                  FOREIGN KEY(job_post_id) REFERENCES job_postings(id)
+                user_id integer NOT NULL,
+                job_post_id integer NOT NULL,
+                
+                FOREIGN KEY(user_id) REFERENCES users(user_id),
+                FOREIGN KEY(job_post_id) REFERENCES job_postings(id)
                 );
                 """
             )

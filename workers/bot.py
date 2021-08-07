@@ -1,16 +1,18 @@
+import asyncio
 import logging
 import os
 import typing
-import asyncio
+
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
 from .request_manager import RequestManager
 
+#   TODO: Add more job search APIS & subsequently create JSON file with their properties.
+#   Currently only supports Job Searching with Adzuna
 
 class JobFinderBot(commands.Bot):
-    # Constants Declaration #
     ADZUNA_REGIONS = {
         "Great Britain": "gb",
         "Austria": "at",
@@ -110,12 +112,17 @@ class JobFinderBot(commands.Bot):
 
         @self.command(pass_context=True)
         async def post(ctx, query, quantity: typing.Optional[int] = 1):
-            response = self.request_manager.make_request(quantity, query)
-            message = self.format_post(response)
-
-            await ctx.channel.send(embed=message)
-
-            self.request_manager.add_posts(response)
+            channel = ctx.channel
+            user = ctx.message.author
+            
+            if self.request_manager.user_exists(user.id):    
+                response = self.request_manager.make_request(user.id, quantity, query)
+                message = self.format_post(response)
+                await channel.send(embed=message)
+                self.request_manager.add_posts(response)
+            else:
+                await channel.send("You must register first with `/jf register`")
+                
 
         @self.command(pass_context=True)
         async def register(ctx):
@@ -123,10 +130,10 @@ class JobFinderBot(commands.Bot):
             user = ctx.message.author
             register_msg = "Please enter your country by selecting its numerical position on this list\n"
             countries_list = list(self.ADZUNA_REGIONS)
-            
+
             for i, country in enumerate(countries_list):
-                register_msg += f"{i+1}. {country} \n"
-                
+                register_msg += f"{i + 1}. {country} \n"
+
             await channel.send(register_msg)
 
             def validate_country(country_num):
@@ -136,16 +143,17 @@ class JobFinderBot(commands.Bot):
                     return False
 
             try:
-                user_ctry = await self.wait_for('message', check=validate_country, timeout=8.0)
-                
+                user_ctry = await self.wait_for('message', check=validate_country, timeout=10.0)
+                user_ctry = self.ADZUNA_REGIONS[countries_list[int(user_ctry.content) - 1]]
+                print(user_ctry)
+
                 if not self.request_manager.user_exists(user.id):
-                    self.request_manager.add_user(user.id, int(user_ctry.content))
+                    self.request_manager.add_user(user.id, user_ctry)
                     await channel.send(f"Grats! We've registered {user.name} .")
                 else:
                     await channel.send("Sorry. Look's like you're already registered.")
             except asyncio.TimeoutError:
-                await channel.send("Timed-out. Please enter your selection within 8s.")
-
+                await channel.send("Timed-out. Please enter your selection within 10s.")
 
     def turn_on(self) -> None:
         self.run(self.token)
