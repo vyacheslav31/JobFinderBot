@@ -1,7 +1,7 @@
 import logging
 import os
 import typing
-
+import asyncio
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -44,6 +44,25 @@ class JobFinderBot(commands.Bot):
                      "&l=map&size={width},{height}"
     map_base_url = "https://www.google.com/maps/search/?api=1" \
                    "&query={latitude},{longitude}"
+    register_msg = f"""
+                Please enter your country by selecting its numerical position on this list
+                1. {ADZUNA_REGIONS[0]}
+                2. {ADZUNA_REGIONS[1]}
+                3. {ADZUNA_REGIONS[2]}
+                4. {ADZUNA_REGIONS[3]}
+                5. {ADZUNA_REGIONS[4]}
+                6. {ADZUNA_REGIONS[5]}
+                7. {ADZUNA_REGIONS[6]}
+                8. {ADZUNA_REGIONS[7]}
+                9. {ADZUNA_REGIONS[8]}
+                10. {ADZUNA_REGIONS[9]}
+                11. {ADZUNA_REGIONS[10]}
+                12. {ADZUNA_REGIONS[11]}
+                13. {ADZUNA_REGIONS[12]}
+                14. {ADZUNA_REGIONS[13]}
+                15. {ADZUNA_REGIONS[14]}
+                16. {ADZUNA_REGIONS[15]}
+                """
 
     logging_format = '[%(asctime)s] %(levelname)s - %(filename)s:%(funcName)s - %(message)s'
     logging.basicConfig(filename='logs/bot.log',
@@ -102,6 +121,7 @@ class JobFinderBot(commands.Bot):
                         value=post["Description"],
                         inline=False)
         return embed
+    
 
     def register_commands(self) -> None:
         """
@@ -109,13 +129,8 @@ class JobFinderBot(commands.Bot):
         """
 
         @self.command(pass_context=True)
-        async def post(ctx, region, query, quantity: typing.Optional[int] = 1):
-            if region not in self.ADZUNA_REGIONS:
-                await ctx.channel.send("Not a valid region")
-
-            response = self.request_manager.make_request(
-                region, quantity, query)
-
+        async def post(ctx, query, quantity: typing.Optional[int] = 1):
+            response = self.request_manager.make_request(quantity, query)
             message = self.format_post(response)
 
             await ctx.channel.send(embed=message)
@@ -124,7 +139,30 @@ class JobFinderBot(commands.Bot):
 
         @self.command(pass_context=True)
         async def register(ctx):
-            pass
+            channel = ctx.channel
+            user = ctx.message.author
+            await channel.send(self.register_msg)
+            
+            def validate_country(country_num):
+                return 0 <= (country_num - 1) < len(self.ADZUNA_REGIONS)
+            
+            try:
+                user_ctry = await self.wait_for('message', check=self.validate_country, timeout=8.0)
+            except asyncio.TimeoutError:
+                await channel.send("Timed-out. Please enter your selection within 8s.")
+                
+            if user_ctry != None and user_ctry != False:
+                self.request_manager.add_user(user.id, user_ctry)
+                channel.send(f"Grats! We've registered {user.name} .")
+            else:
+                channel.send("Not a valid choice.")
+                
+            
+                
+            
+            
+            
+            
 
     def turn_on(self) -> None:
         self.run(self.token)

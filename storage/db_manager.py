@@ -16,17 +16,33 @@ class DatabaseManager:
 
     def insert_posts(self, posts):
         for post in posts:
-            self.cursor.execute(
-                """
-                INSERT INTO job_postings(id, parent_)
-                """
-            )
-        
+            self.cursor.execute("INSERT INTO job_postings VALUES (:id, :parent_search_id, :title, :company, "
+                                ":description, "
+                                ":location, :post_date, :latitude, :longitude, :url, :category)",
+                                {
+                                    'id': post["ID"],
+                                    'title': post['Title'],
+                                    'company': post["Company"],
+                                    'description': post['Description'],
+                                    'location': post["Location"],
+                                    'post_date': post["Post Date"],
+                                    'latitude': post["Latitude"],
+                                    'longitude': post["Longitude"],
+                                    'url': post["URL"],
+                                    'category': post["Category"]
+                                }
+                                )
 
-    def insert_user(self):
-        pass
+    def insert_user(self, user_id, country):
+        self.cursor.execute("INSERT INTO users VALUES (:user_id, :country)", {
+            'user_id': user_id,
+            'country': country
+        })
+    
+    def get_user_region(self, user_id):
+        self.cursor.execute(f"SELECT country FROM users WHERE user_id = {user_id}")
 
-    def insert_searche(self):
+    def insert_searches(self):
         pass
 
     def get_posts(self):
@@ -49,7 +65,7 @@ class DatabaseManager:
             self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS searches (
-                    search_id integer PRIMARY KEY,
+                    search_id integer PRIMARY KEY AUTOINCREMENT,
                     keywords text
                     );
                 """
