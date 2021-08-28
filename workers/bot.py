@@ -12,6 +12,7 @@ from .request_manager import RequestManager
 #   TODO: Add more job search APIS & subsequently create JSON file with their properties.
 #   Currently only supports Job Searching with Adzuna
 
+
 class JobFinderBot(commands.Bot):
     ADZUNA_REGIONS = {
         "Great Britain": "gb",
@@ -114,15 +115,15 @@ class JobFinderBot(commands.Bot):
         async def post(ctx, query, quantity: typing.Optional[int] = 1):
             channel = ctx.channel
             user = ctx.message.author
-            
-            if self.request_manager.user_exists(user.id):    
-                response = self.request_manager.make_request(user.id, quantity, query)
+
+            if self.request_manager.user_exists(user.id):
+                response = self.request_manager.make_request(
+                    user.id, quantity, query)
                 message = self.format_post(response)
                 await channel.send(embed=message)
                 self.request_manager.add_posts(response)
             else:
                 await channel.send("You must register first with `/jf register`")
-                
 
         @self.command(pass_context=True)
         async def register(ctx):
@@ -144,7 +145,8 @@ class JobFinderBot(commands.Bot):
 
             try:
                 user_ctry = await self.wait_for('message', check=validate_country, timeout=10.0)
-                user_ctry = self.ADZUNA_REGIONS[countries_list[int(user_ctry.content) - 1]]
+                user_ctry = self.ADZUNA_REGIONS[countries_list[int(
+                    user_ctry.content) - 1]]
                 print(user_ctry)
 
                 if not self.request_manager.user_exists(user.id):
