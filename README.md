@@ -1,7 +1,7 @@
 ### <i>Work in Progress</i>
 # JobFinderBot
 JobFinderBot is a discord bot that helps you look for job on websites like Indeed and Monster. 
-[JobFinderBot](https://raw.githubusercontent.com/vyacheslav31/JobFinderBot/main/resources/img/JobFinderBot-02.png)
+![JobFinderBot](https://raw.githubusercontent.com/vyacheslav31/JobFinderBot/main/resources/img/JobFinderBot-02.png)
 # Installation
 ### Dependencies
 * <b>dotenv</b> : Used for loading credentials from the .env file.
