@@ -12,7 +12,7 @@ JobFinderBot is a discord bot that helps you look for job on websites like Indee
 An .env file must be present in the root directory of this project containing your Discord token and API credentials.
 
 # Support
-I maintain this repository for free, if you find it in your ❤️ to support me, you can do so here: paypal.me/vygor
+I maintain this repository for free, if you find it in your ❤️ to support me, 🌟 this repo.
 
 # License
 <i>MIT License
