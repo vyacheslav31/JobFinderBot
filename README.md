@@ -11,6 +11,11 @@ JobFinderBot is a discord bot that helps you look for job on websites like Indee
 ### Note
 An .env file must be present in the root directory of this project containing your Discord token and API credentials.
 
+# Program Control flow
+This is the principal flow of the program and the main way that users will be interacting with bot. Each invocation of the post method follows this sequence diagram.
+
+![jobfinderbot_controlflow_sequence_diagram](https://user-images.githubusercontent.com/43866398/134757591-a65a5448-d7a3-49bf-b446-a458e0a4b77a.png)
+
 # Support
 I maintain this repository for free, if you find it in your ❤️ to support me, 🌟 this repo.
 
