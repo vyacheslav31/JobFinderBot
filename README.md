@@ -1,9 +1,13 @@
-### <i>Work in Progress</i>
-# JobFinderBot
-JobFinderBot is a discord bot that helps you look for job on websites like Indeed and Monster. 
+
 ![JobFinderBot](https://raw.githubusercontent.com/vyacheslav31/JobFinderBot/main/resources/img/JobFinderBot-02.png)
+JobFinderBot is a discord bot that helps you look for job on websites like Indeed and Monster. 
+### <i>Work in Progress ...</i>
 ## Installation
+### Requirements
+* Adzuna API Credentials [[link]](https://developer.adzuna.com/)
+* Discord Bot Token [[link]](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot)
 ### Dependencies
+* <b>node.js v16</b> : Needed for interacting with DiscordJS v13.
 * <b>dotenv</b> : Used for loading credentials from the .env file.
 * <b>discord.js</b> : A popular NodeJS Discord API wrapper (https://discord.js.org/#/docs/main/stable/general/welcome).
 * <b>axios</b> : Axios is used for making requests to various job search APIs.

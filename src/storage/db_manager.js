@@ -4,13 +4,13 @@ const path = require("path");
 
 class DatabaseManager {
     constructor() {
-        this.db = new Database(":memory:", {verbose: console.log});
+        this.db = new Database(":memory:", { verbose: console.log });
         this.setupDb();
     }
 
     setupDb() {
         try {
-            let statements = JSON.parse(fs.readFileSync(path.join(__dirname, "statements.json")));
+            let statements = JSON.parse(fs.readFileSync(path.join(__dirname, "db_statements.json")));
 
             for (const statement in statements) {
                 let preparedStatement = this.db.prepare(statements[statement]);

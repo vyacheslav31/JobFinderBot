@@ -1,18 +1,27 @@
 {
   "name": "jobfinderbot",
   "version": "1.0.0",
-  "description": "JobFinderBot is a discord bot that helps you look for job on websites like Indeed and Monster.",
+  "description": "JobFinderBot is a discord bot that helps you look for jobs on websites like Indeed and Monster.",
   "main": "launcher.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./launcher.js",
-    "dev": "nodemon ./src/bot.js"
+    "dev": "npx nodemon ./launcher.js"
   },
   "author": "Vyacheslav Gorbov",
+  "homepage": "TBD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyacheslav31/JobFinderBot.git"
+  },
+  "bugs": "https://github.com/vyacheslav31/JobFinderBot/issues",
   "license": "MIT",
   "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
     "axios": "^0.21.4",
     "better-sqlite3": "^7.4.3",
+    "discord-api-types": "^0.23.1",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "node": "^16.9.1"
