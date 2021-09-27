@@ -19,7 +19,7 @@ An .env file must be present in the root directory of this project containing yo
 ## Program Control flow
 This is the principal flow of the program and the main way that users will be interacting with bot. Each invocation of the post method follows this sequence diagram.
 
-![jobfinderbot_controlflow_sequence_diagram](https://user-images.githubusercontent.com/43866398/134757591-a65a5448-d7a3-49bf-b446-a458e0a4b77a.png)
+![jobfinderbot_controlflow_sequence_diagram](https://github.com/vyacheslav31/JobFinderBot/blob/f20e7ff426d38a6a4f09c344d7e0e69d5ca7f20e/resources/img/jfb_sequence_diagram.png)
 
 ## Support
 I maintain this repository for free, if you find it in your ❤️ to support me, 🌟 this repo.
