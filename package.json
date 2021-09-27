@@ -1,0 +1,20 @@
+{
+  "name": "jobfinderbot",
+  "version": "1.0.0",
+  "description": "JobFinderBot is a discord bot that helps you look for job on websites like Indeed and Monster.",
+  "main": "launcher.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./launcher.js",
+    "dev": "nodemon ./src/bot.js"
+  },
+  "author": "Vyacheslav Gorbov",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "better-sqlite3": "^7.4.3",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
+    "node": "^16.9.1"
+  }
+}
