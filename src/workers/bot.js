@@ -1,13 +1,13 @@
 const { Client, Collection, Intents } = require('discord.js');
 const DatabaseManager = require("../storage/db_manager");
 const RequestManager = require("./request_manager");
+const fs = require('fs');
 const env = require('dotenv');
 
 
 class JobFinderBot extends Client {
 
-    constructor(props) {
-        this.commandFiles = fs.readdirSync("../commands").filter(file => file.endsWith('.js'));
+    constructor() {
         const intents = new Intents([
             Intents.FLAGS.DIRECT_MESSAGES,
             Intents.FLAGS.GUILDS,
@@ -21,7 +21,10 @@ class JobFinderBot extends Client {
     }
 
     init() {
-        // TODO: setup logs folder
+        var log_dir = '../../log';
+        if (!fs.existsSync(log_dir)) {
+            fs.mkdirSync(dir);
+        }
         // TODO: setup logging
         this.on('ready', () => {
             console.log(`${this.user.tag} is now active.`);
@@ -34,7 +37,9 @@ class JobFinderBot extends Client {
     }
 
     registerCommands() {
-        for(const file of this.commandFiles) {
+        var commandFiles = fs.readdirSync("../commands").filter(file => file.endsWith('.js'));
+
+        for(const file of commandFiles) {
             const command = require(`./commands/${file}`);
             this.commands.set(command.data.name, command);
         }

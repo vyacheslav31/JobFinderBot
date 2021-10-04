@@ -8,6 +8,9 @@ class DatabaseManager {
         this.setupDb();
     }
 
+    /**
+     * Executes all the statements required for setting up the database
+     */
     setupDb() {
         try {
             let statements = JSON.parse(fs.readFileSync(path.join(__dirname, "db_statements.json")));
@@ -23,6 +26,27 @@ class DatabaseManager {
             }
         }
     }
+
+    /**
+     * Used for periodically trimming DB size to prevent memory overuse.
+     */
+    trimDm() {
+
+    }
+
+    insertUser(userId, country) {
+
+    }
+
+    getUserRegion(userId) {
+
+    }
+
+    userExists(userId) {
+        
+    }
+
+
 }
 
 module.exports = DatabaseManager;
