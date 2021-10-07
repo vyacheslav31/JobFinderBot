@@ -23,7 +23,7 @@ class JobFinderBot extends Client {
     init() {
         var log_dir = '../../log';
         if (!fs.existsSync(log_dir)) {
-            fs.mkdirSync(dir);
+            fs.mkdirSync(log_dir);
         }
         // TODO: setup logging
         this.on('ready', () => {
@@ -37,10 +37,10 @@ class JobFinderBot extends Client {
     }
 
     registerCommands() {
-        var commandFiles = fs.readdirSync("../commands").filter(file => file.endsWith('.js'));
+        var commandFiles = fs.readdirSync("./src/commands").filter(file => file.endsWith('.js'));
 
         for(const file of commandFiles) {
-            const command = require(`./commands/${file}`);
+            const command = require(`../commands/${file}`);
             this.commands.set(command.data.name, command);
         }
 
