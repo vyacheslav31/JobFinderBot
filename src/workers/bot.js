@@ -70,7 +70,7 @@ class JobFinderBot extends Client {
             if (!command) return;
 
             try {
-                command.reply("need help?");
+                await command.execute(interaction);
             } catch (error) {
                 console.error(error);
                 return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
