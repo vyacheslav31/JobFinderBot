@@ -1,9 +1,10 @@
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Intents } = require('discord.js');
 const DatabaseManager = require("../storage/db_manager");
 const RequestManager = require("./request_manager");
 const fs = require('fs');
 const env = require('dotenv');
-
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9')
 
 class JobFinderBot extends Client {
 
@@ -15,7 +16,7 @@ class JobFinderBot extends Client {
         ]);
         super({ intents: intents });
         env.config();
-        this.commands = new Collection();
+        this.commands = [];
         this.requestManager = new RequestManager();
         this.registerCommands();
     }
@@ -27,7 +28,7 @@ class JobFinderBot extends Client {
         }
         // TODO: setup logging
         this.on('ready', () => {
-            console.log(`${this.user.tag} is now active.`);
+            console.log(`${this.user.tag} is now active!`);
         });
         this.login(process.env.TOKEN);
     }
@@ -41,8 +42,24 @@ class JobFinderBot extends Client {
 
         for(const file of commandFiles) {
             const command = require(`../commands/${file}`);
-            this.commands.set(command.data.name, command);
+            this.commands.push(command.data);
         }
+
+        const rest = new REST({ version: '9'}).setToken(process.env.TOKEN);
+        (async () => {
+            try {
+              console.log('Started refreshing application (/) commands.');
+          
+              await rest.put(
+                Routes.applicationGuildCommands(process.env.DISCORD_APP_ID, process.env.CHANNEL),
+                { body: this.commands },
+              );
+              
+              console.log('Successfully reloaded application (/) commands.');
+            } catch (error) {
+              console.error(error);
+            }
+        })();
 
         this.on('interactionCreate', async interaction => {
             if (!interaction.isCommand()) {
@@ -53,7 +70,7 @@ class JobFinderBot extends Client {
             if (!command) return;
 
             try {
-                await command.execute(interaction);
+                command.reply("need help?");
             } catch (error) {
                 console.error(error);
                 return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
