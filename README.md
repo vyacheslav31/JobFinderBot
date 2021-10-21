@@ -23,14 +23,19 @@ npm install
 ```
 ### Environment
 Replace all the `#` with your credentials and choose `production` or `development`
-```
+```s
+# Adzuna Credentials
 ADZUNA_APP_ID=#
 ADZUNA_APP_KEY=#
-DISCORD_APP_ID=#
-DISCORD_APP_KEY=#
-CHANNEL=#
-TOKEN=#
-LOGGING_LVL={development:production}
+
+# Discord Credentials
+DISCORD_CLIENT_ID=#
+DISCORD_CLIENT_KEY=#
+DISCORD_GUILD_ID=#
+DISCORD_TOKEN=#
+
+# General Env Vars
+NODE_ENV={development:production}
 ```
 ### Running the bot
 ```sh
