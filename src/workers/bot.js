@@ -19,7 +19,6 @@ class JobFinderBot extends Client {
         env.config();
         this.commands = new Collection();
         this.requestManager = new RequestManager();
-        this.dbManager = new DatabaseManager();
     }
 
     init() {

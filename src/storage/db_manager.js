@@ -1,6 +1,7 @@
 const Database = require('better-sqlite3');
 const fs = require("fs");
 const path = require("path");
+const dbStatements = require('./db_statements');
 
 class DatabaseManager {
     constructor() {
@@ -13,10 +14,8 @@ class DatabaseManager {
      */
     setupDb() {
         try {
-            let statements = JSON.parse(fs.readFileSync(path.join(__dirname, "db_statements.json")));
-
-            for (const statement in statements) {
-                let preparedStatement = this.db.prepare(statements[statement]);
+            for (const statement of dbStatements) {
+                let preparedStatement = this.db.prepare(statement);
                 preparedStatement.run();
             }
         }
@@ -46,8 +45,9 @@ class DatabaseManager {
         
     }
 
-    test(astr) {
-        console.log(astr);
+    test(userId, country) {
+        console.log(userId);
+        console.log(country);
     }
 
 

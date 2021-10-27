@@ -6,8 +6,7 @@ module.exports = {
 		.setName('register')
 		.setDefaultPermission(true)
 		.setDescription('Register your'),
-	async execute(interaction, db) {	
-		console.log(db.test("Hello"));
+	async execute(interaction, db) {	;
 		return interaction.reply('Pong!');
 	},
 };
