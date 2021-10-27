@@ -46,6 +46,10 @@ class DatabaseManager {
         
     }
 
+    test(astr) {
+        console.log(astr);
+    }
+
 
 }
 

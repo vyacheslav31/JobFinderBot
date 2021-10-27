@@ -1,9 +1,9 @@
-{
-    "Adzuna": {
-        "name": "Adzuna",
-        "url": "https://www.adzuna.com",
-        "icon": "https://i.ibb.co/ryxpxNC/adzuna-logo.png",
-        "regions": {
+module.exports = {
+    Adzuna: {
+        name: "Adzuna",
+        url: "https://www.adzuna.com",
+        icon: "https://i.ibb.co/ryxpxNC/adzuna-logo.png",
+        regions: {
             "Great Britain": "gb",
             "Austria": "at",
             "Australia": "au",

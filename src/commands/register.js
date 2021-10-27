@@ -1,10 +1,13 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { DatabaseManager } = require('../storage/db_manager');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('register')
-		.setDescription('Replies with Pong!'),
-	async execute(interaction) {
+		.setDefaultPermission(true)
+		.setDescription('Register your'),
+	async execute(interaction, db) {	
+		console.log(db.test("Hello"));
 		return interaction.reply('Pong!');
 	},
 };

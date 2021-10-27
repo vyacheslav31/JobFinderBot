@@ -3,10 +3,9 @@ const DatabaseManager = require("../storage/db_manager");
 const RequestManager = require("./request_manager");
 const fs = require('fs');
 const env = require('dotenv');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const { exit } = require('process');
 const log_dir = '../../log';
+const config = require('../storage/bot_config');
+const { exit } = require('process');
 
 class JobFinderBot extends Client {
 
@@ -20,6 +19,7 @@ class JobFinderBot extends Client {
         env.config();
         this.commands = new Collection();
         this.requestManager = new RequestManager();
+        this.dbManager = new DatabaseManager();
     }
 
     init() {
@@ -43,7 +43,7 @@ class JobFinderBot extends Client {
 
             // Attempt to execute command
             try {
-                await command.execute(interaction);
+                await command.execute(interaction, this.dbManager);
             } catch (error) {
                 console.error(error);
                 return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
@@ -52,9 +52,12 @@ class JobFinderBot extends Client {
         });
     }
 
+    /**
+     * This function reads the command files into the 'Commands' collection.
+     * - Which are later used to invoke the commands and return the appropriate responses
+     */
     registerCommands() { 
         let commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
-        console.log(commandFiles);
        
         for (const file of commandFiles) {
             const command = require(`../commands/${file}`);
