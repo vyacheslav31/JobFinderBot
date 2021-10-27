@@ -17,7 +17,7 @@ class RequestManager {
     }
 
     registerUser(userId, country) {
-
+        this.dbManager.insertUser(userId, country);
     }
 
     userExists(userId) {
