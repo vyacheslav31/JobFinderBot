@@ -4,8 +4,9 @@ const RequestManager = require("./request_manager");
 const fs = require('fs');
 const env = require('dotenv');
 const log_dir = '../../log';
-const config = require('../storage/bot_config');
-const { exit } = require('process');
+const botConfig = require('../storage/bot_config');
+const regions = require('../storage/api_config').Adzuna.regions;
+
 
 class JobFinderBot extends Client {
 
@@ -19,20 +20,47 @@ class JobFinderBot extends Client {
         env.config();
         this.commands = new Collection();
         this.requestManager = new RequestManager();
+        this.regionOptions = [];
     }
 
     init() {
+        // Ensure logging folder exists
         if (!fs.existsSync(log_dir)) {
             fs.mkdirSync(log_dir);
         }
         // TODO: setup logging
+        // Register all available bot commands
+        this.registerCommands();
+        // Define region options
+        for (const region in regions) {
+            this.regionOptions.push({
+                label: region,
+                value: regions[region]
+            });
+        }
+
+        // Affirm ready state
         this.on('ready', () => {
             console.log(`${this.user.tag} is now active!`);
         });
-        this.registerCommands();
         this.login(process.env.DISCORD_TOKEN);
-        
-        // Listen for interactions
+    }
+
+    /**
+     * This function does 2 things: 
+     * 1. It reads the command files into the 'Commands' collection. They are later used to invoke the commands and return the appropriate responses.
+     * 2. It attaches all the possible event listeners to the bot.
+     */
+    registerCommands() {
+        // Read and register the command files with the bot
+        let commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
+
+        for (const file of commandFiles) {
+            const command = require(`../commands/${file}`);
+            this.commands.set(command.data.name, command);
+        }
+
+        // Attach command event listener
         this.on('interactionCreate', async interaction => {
             if (!interaction.isCommand()) return;
 
@@ -40,28 +68,32 @@ class JobFinderBot extends Client {
 
             if (!command) return;
 
-            // Attempt to execute command
+            // Attempt to execute user command
             try {
-                await command.execute(interaction, this.dbManager);
+                await command.execute(interaction, this);
             } catch (error) {
                 console.error(error);
                 return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
             }
 
         });
-    }
 
-    /**
-     * This function reads the command files into the 'Commands' collection.
-     * - Which are later used to invoke the commands and return the appropriate responses
-     */
-    registerCommands() { 
-        let commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
-       
-        for (const file of commandFiles) {
-            const command = require(`../commands/${file}`);
-            this.commands.set(command.data.name, command);
-        }
+        // Attach menu selection event listener
+        this.on('interactionCreate', async interaction => {
+            if (!interaction.isSelectMenu()) return;
+
+            switch (interaction.customId) {
+                case 'region_select':
+                    try {
+                        this.requestManager.registerUser(interaction.member.user.id, interaction.values[0]);
+                        await interaction.reply({ content: 'You have been registered.', ephemeral: true });
+                    }
+                    catch (SqliteError) {
+                        // TODO: Etheir create an `update` command or overwrite existing country in DB if user re-registers
+                        await interaction.reply({ content: "You have already been registered.", ephemeral: true });
+                    }
+            }
+        });
     }
 
     formatPost(post) {

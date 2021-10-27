@@ -1,6 +1,7 @@
 const Database = require('better-sqlite3');
 const fs = require("fs");
 const path = require("path");
+const { exit } = require('process');
 const dbStatements = require('./db_statements');
 
 class DatabaseManager {
@@ -14,7 +15,7 @@ class DatabaseManager {
      */
     setupDb() {
         try {
-            for (const statement of dbStatements) {
+            for (const statement of dbStatements.dbCreation) {
                 let preparedStatement = this.db.prepare(statement);
                 preparedStatement.run();
             }
@@ -34,7 +35,16 @@ class DatabaseManager {
     }
 
     insertUser(userId, country) {
-
+        try {
+            let preparedStmt = this.db.prepare(dbStatements.transactions.insertNewUser(userId, country));
+            preparedStmt.run();
+        }
+        catch (except) {
+            if (!this.db.inTransaction) {
+                // TODO: LOG SQL ERROR
+                throw except;
+            }
+        }
     }
 
     getUserRegion(userId) {
@@ -42,7 +52,7 @@ class DatabaseManager {
     }
 
     userExists(userId) {
-        
+
     }
 
     test(userId, country) {
