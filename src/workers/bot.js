@@ -5,7 +5,7 @@ const fs = require('fs');
 const env = require('dotenv');
 const log_dir = '../../log';
 const botConfig = require('../storage/bot_config');
-const regions = require('../storage/api_config').Adzuna.regions;
+const apiConfig = require('../storage/api_config');
 
 
 class JobFinderBot extends Client {
@@ -20,7 +20,8 @@ class JobFinderBot extends Client {
         env.config();
         this.commands = new Collection();
         this.requestManager = new RequestManager();
-        this.regionOptions = [];
+        this.adzuna = apiConfig.Adzuna;
+        this.config = botConfig;
     }
 
     init() {
@@ -31,14 +32,7 @@ class JobFinderBot extends Client {
         // TODO: setup logging
         // Register all available bot commands
         this.registerCommands();
-        // Define region options
-        for (const region in regions) {
-            this.regionOptions.push({
-                label: region,
-                value: regions[region]
-            });
-        }
-
+       
         // Affirm ready state
         this.on('ready', () => {
             console.log(`${this.user.tag} is now active!`);

@@ -30,7 +30,7 @@ class DatabaseManager {
     /**
      * Used for periodically trimming DB size to prevent memory overuse.
      */
-    trimDm() {
+    trimDb() {
 
     }
 
@@ -47,17 +47,16 @@ class DatabaseManager {
         }
     }
 
+    insertPost(post) {
+
+    }
+
     getUserRegion(userId) {
 
     }
 
     userExists(userId) {
 
-    }
-
-    test(userId, country) {
-        console.log(userId);
-        console.log(country);
     }
 
 
