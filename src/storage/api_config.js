@@ -20,6 +20,10 @@ module.exports = {
             "Singapore": "sg",
             "United States": "us",
             "South Africa": "za"
+        },
+        requestUrl: (appId, appKey, country, pages, results, what, where) => {
+            return `https://api.adzuna.com/v1/api/jobs/${country}/search/${pages}?app_id=${appId}&app_key=${appKey}&results_per_page=${results}&what=${what}&where=${where}`;
         }
+        
     }
 }

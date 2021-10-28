@@ -55,11 +55,6 @@ class DatabaseManager {
 
     }
 
-    test(userId, country) {
-        console.log(userId);
-        console.log(country);
-    }
-
 
 }
 
