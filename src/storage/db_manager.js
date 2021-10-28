@@ -30,7 +30,7 @@ class DatabaseManager {
     /**
      * Used for periodically trimming DB size to prevent memory overuse.
      */
-    trimDm() {
+    trimDb() {
 
     }
 
@@ -45,6 +45,10 @@ class DatabaseManager {
                 throw except;
             }
         }
+    }
+
+    insertPost(post) {
+
     }
 
     getUserRegion(userId) {

@@ -13,7 +13,7 @@ module.exports = {
 				.setCustomId('region_select')
 				.setPlaceholder("No country selected !")
 				.setMaxValues(1)
-				.addOptions(bot.regionOptions),
+				.addOptions(bot.adzuna.regions),
 		);
 		await interaction.reply({ content: 'Please select your country.', ephemeral: true, components: [row] });
 	},

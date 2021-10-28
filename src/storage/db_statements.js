@@ -7,6 +7,9 @@ module.exports = {
         ],
         transactions : {
                 insertNewUser : (userId, country) => { return `INSERT INTO users VALUES (${userId}, '${country}');`},
+                insertJobPost : (postId, searchId, title, company, description, location, postDate, latitude, longitude, url, category) => {
+                        return `INSERT INTO job_postings VALUES (${postId}, ${searchId}, '${title}', '${company}', '${description}', '${location}', '${postDate}', '${latitude}', '${longitude}', '${url}', '${category}');`
+                },
                 getUserRegion : (userId) => { return `SELECT country FROM users WHERE user_id = ${userId};`},
                 userExists : (userId) => { return `SELECT EXISTS(SELECT 1 FROM users WHERE WHERE user_id=${userId} LIMIT 1);`},
         }

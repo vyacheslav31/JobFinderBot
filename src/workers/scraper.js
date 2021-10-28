@@ -7,31 +7,36 @@ const requestUrl = require('../storage/api_config').Adzuna.requestUrl;
  */
 class Scraper {
     constructor() {
-        this.makeJobRequest('ca', 1, 1, "software%20developer", "montreal");
+
     }
 
-   
+
     /**
-     * 
+     * User-initiated API search which will return the results based on a query.
      * @param {Country [ca, br, etc...]} country 
      * @param {Number of Pages [1, 2, 3, etc...]} pages 
      * @param {Number of Results per Page} results 
      * @param {Query [Engineer, Accountant, etc...]} what 
      * @param {Location [City, PostalCode]} where 
      */
-    makeJobRequest(country, pages = 1, results = 1, what, where) {
-        axios.get(requestUrl(
+    async makeRequest(country, what, where = '', page = 1, results = 1) {
+        what = encodeURIComponent(what.trim());
+        where = encodeURIComponent(where.trim());
+
+        const posts = await axios.get(requestUrl(
             process.env.ADZUNA_APP_ID,
             process.env.ADZUNA_APP_KEY,
             country,
-            pages,
+            page,
             results,
             what,
             where
         )
         ).then((response) => {
-            console.log(response.data);
+            return response.data.results[0];
         });
+      
+        return posts;
     }
 }
 
