@@ -27,7 +27,8 @@ class RequestManager {
     }
 
     userExists(userId) {
-
+        const result = this.dbManager.userExists(userId);
+        process.exit();
     }
 
     savePosts(posts) {

@@ -36,8 +36,8 @@ class DatabaseManager {
 
     insertUser(userId, country) {
         try {
-            let preparedStmt = this.db.prepare(dbStatements.transactions.insertNewUser(userId, country));
-            preparedStmt.run();
+            let preparedStmt = this.db.prepare(dbStatements.transactions.insertNewUser);
+            preparedStmt.run(userId + '', country);
         }
         catch (except) {
             if (!this.db.inTransaction) {
@@ -56,7 +56,18 @@ class DatabaseManager {
     }
 
     userExists(userId) {
-
+        try {
+            let preparedStmt = this.db.prepare(dbStatements.transactions.userExists);
+            let user = preparedStmt.get(userId);
+            console.log(user)
+            process.exit();
+        }
+        catch (except) {
+            if (!this.db.inTransaction) {
+                // TODO: LOG SQL ERROR
+                throw except;
+            }
+        }
     }
 
 

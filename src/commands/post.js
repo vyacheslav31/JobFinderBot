@@ -47,7 +47,6 @@ module.exports = {
                 { name: 'Location', value: posts.location.display_name, inline: true},
                 { name: 'Post Date', value: Date(posts.created).toLocaleString(), inline: true},
                 { name: 'Category', value: posts.category.label, inline: true},
-                { name: 'Title', value: posts.title, inline: true},
                 { name: 'Description', value: posts.description, inline: false},
             )
             .setTimestamp()
@@ -56,8 +55,7 @@ module.exports = {
             return interaction.reply({ embeds: [formattedPost], ephemeral: true });
         }
         catch (except) {
-            console.log(except);
-            return interaction.reply("An error occured.");
+            return interaction.reply({content:"An error occured.", ephemeral: true});
         }
 
     }

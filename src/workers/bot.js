@@ -32,7 +32,7 @@ class JobFinderBot extends Client {
         // TODO: setup logging
         // Register all available bot commands
         this.registerCommands();
-       
+
         // Affirm ready state
         this.on('ready', () => {
             console.log(`${this.user.tag} is now active!`);
@@ -59,6 +59,9 @@ class JobFinderBot extends Client {
             if (!interaction.isCommand()) return;
 
             const command = this.commands.get(interaction.commandName);
+            if (!this.requestManager.userExists(interaction.user.id) && command !== 'register') {
+                return interaction.reply({content: 'You must register first.', ephemeral: true})
+            }
 
             if (!command) return;
 
@@ -84,6 +87,7 @@ class JobFinderBot extends Client {
                     }
                     catch (SqliteError) {
                         // TODO: Etheir create an `update` command or overwrite existing country in DB if user re-registers
+                        console.log(SqliteError)
                         await interaction.reply({ content: "You have already been registered.", ephemeral: true });
                     }
             }
