@@ -69,8 +69,8 @@ class DatabaseManager {
 
     insertSearch(searchTerm) {
         try {
-            console.log(this.db.prepare(dbStatements.transactions.insertSearch).run(searchTerm + ''));
-            process.exit();
+            console.log(this.db.prepare(dbStatements.transactions.insertNewSearch).get(searchTerm).keywords);
+            exit();
         }
         catch (SqliteError) {
             if (!this.db.inTransaction) {

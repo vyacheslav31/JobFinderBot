@@ -26,7 +26,9 @@ module.exports = {
         const quantity = interaction.options.getInteger('quantity');
 
         try {
-            const posts = await bot.requestManager.requestPosts(userId,query,location,quantity);
+            const posts = await bot.requestManager.requestPosts(...[userId, query, location, quantity].filter((arg) => {
+                return arg != null;
+            }));
          
             // Format Post via DiscordEmbed
             const formattedPost = new MessageEmbed()

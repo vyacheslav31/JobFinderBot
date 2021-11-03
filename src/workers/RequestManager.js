@@ -16,7 +16,7 @@ class RequestManager {
          */
         const region = this.getUserRegion(userId);
         const posts = await this.scraper.makeRequest(region, query, location, quantity);
-        await savePosts(posts, query);
+        await this.savePosts(posts, query);
         return posts;
 
     }
@@ -33,8 +33,8 @@ class RequestManager {
         await this.dbManager.insertPosts(posts);
     }
 
-    async getUserRegion(userId) {
-        await this.dbManager.getUserRegion(userId);
+    getUserRegion(userId) {
+        return this.dbManager.getUserRegion(userId);
     }
 
 
