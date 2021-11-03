@@ -1,5 +1,4 @@
 const { Client, Collection, Intents } = require('discord.js');
-const DatabaseManager = require("./DatabaseManager");
 const RequestManager = require("./RequestManager");
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
@@ -60,14 +59,21 @@ class JobFinderBot extends Client {
             if (!interaction.isCommand()) return;
 
             const command = this.commands.get(interaction.commandName);
+            let userExists = typeof this.requestManager.userExists(interaction.user.id) !== 'undefined'
 
-            if (typeof this.requestManager.userExists(interaction.user.id) == 'undefined' && command.data.name !== 'register') {
+            if (!userExists && command.data.name !== 'register') {
                 const formattedMsg = new MessageEmbed()
                 .setColor(this.adzuna.postColor)
-                .setDescription('Please use `/register` first. (We need to know which country to look for job postings in)')
-                .setTimestamp()
-                .setFooter('JobFinderBot');
+                .setDescription('Please use `/register` first.\n(We need to know which country to look for job postings in)')
+                .setFooter('JobFinderBot', 'https://i.imgur.com/EljOMTr.png');
                 return interaction.reply({ embeds: [formattedMsg], ephemeral: true })
+            }
+            else if (userExists && command.data.name == 'register') {
+                const formattedMsg = new MessageEmbed()
+                .setColor(this.adzuna.postColor)
+                .setDescription('You are already registered.')
+                .setFooter('JobFinderBot', 'https://i.imgur.com/EljOMTr.png');
+                return interaction.reply({ embeds: [formattedMsg], ephemeral: true });
             }
 
             if (!command) return;
@@ -92,15 +98,13 @@ class JobFinderBot extends Client {
                         const formattedMsg = new MessageEmbed()
                             .setColor(this.adzuna.postColor)
                             .setDescription('Thank you! You have been registered.')
-                            .setTimestamp()
-                            .setFooter('JobFinderBot');
+                            .setFooter('JobFinderBot', 'https://i.imgur.com/l8TP5bg.png');
                         this.requestManager.registerUser(interaction.member.user.id, interaction.values[0]);
                         await interaction.update({ embeds: [formattedMsg], components: [], ephemeral: true });
                     }
                     catch (SqliteError) {
                         // TODO: Etheir create an `update` command or overwrite existing country in DB if user re-registers
                         console.log(SqliteError)
-                        await interaction.reply({ content: "You have already been registered.", ephemeral: true });
                     }
             }
         });
