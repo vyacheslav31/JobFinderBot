@@ -5,8 +5,8 @@ const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const env = require('dotenv');
 const log_dir = '../../log';
-const botConfig = require('../storage/bot_config');
-const apiConfig = require('../storage/api_config');
+const botConfig = require('../storage/bot.config');
+const apiConfig = require('../storage/api.config');
 
 
 class JobFinderBot extends Client {

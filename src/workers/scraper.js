@@ -1,5 +1,5 @@
 const axios = require('axios');
-const requestUrl = require('../storage/api_config').Adzuna.requestUrl;
+const requestUrl = require('../storage/api.config').Adzuna.requestUrl;
 
 
 /**
