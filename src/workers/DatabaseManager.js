@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 const { exit } = require('process');
-const dbStatements = require('./db_statements');
+const dbStatements = require('../storage/DatabaseStatements');
 
 class DatabaseManager {
     constructor() {

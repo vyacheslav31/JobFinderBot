@@ -1,5 +1,5 @@
-const DatabaseManager = require('../storage/db_manager');
-const Scraper = require('./scraper');
+const DatabaseManager = require('./DatabaseManager');
+const Scraper = require('./Scraper');
 
 class RequestManager {
     constructor() {

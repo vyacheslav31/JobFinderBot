@@ -1,6 +1,6 @@
 const { Client, Collection, Intents } = require('discord.js');
-const DatabaseManager = require("../storage/db_manager");
-const RequestManager = require("./request_manager");
+const DatabaseManager = require("./DatabaseManager");
+const RequestManager = require("./RequestManager");
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const env = require('dotenv');
