@@ -1,6 +1,5 @@
 const axios = require('axios');
 const requestUrl = require('../storage/api.config').Adzuna.requestUrl;
-const { exit } = require('process');
 
 /**
  * The purpose of this class is to make various API requests to obtain job postings.
@@ -36,7 +35,7 @@ class Scraper {
         ).then((response) => {
             return response.data.results;
         });
-        
+
         return posts;
     }
 }

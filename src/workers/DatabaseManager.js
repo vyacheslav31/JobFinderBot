@@ -1,4 +1,5 @@
 const Database = require('better-sqlite3');
+const crypto = require('crypto');
 const { exit } = require('process');
 const dbStatements = require('../storage/DatabaseStatements');
 
@@ -48,7 +49,10 @@ class DatabaseManager {
 
     async insertPosts(posts, searchTerm) {
         // Insert Search Term
-        const searchId = this.insertSearch(searchTerm);
+        const searchId = crypto.randomUUID();
+        this.insertSearch(searchId, searchTerm);
+        console.log(posts);
+        exit();
         // Extract Post Data & replace undefined values with 'Unknown's
         for (const post in posts) {
             const postData = [
@@ -58,19 +62,18 @@ class DatabaseManager {
                 typeof post.redirect_url !== 'undefined' ? post.redirect_url : 'Unknown',
                 typeof post.longitude !== 'undefined' ? post.longitude : 'Unknown',
                 typeof post.latitude !== 'undefined' ? post.latitude : 'Unknown',
-                typeof post.company.display_name !== 'undefined' ? post.company.display_name : 'Unknown',
-                typeof post.location.display_name !== 'undefined' ? post.location.display_name : 'Unknown',
+                typeof post.company?.display_name !== 'undefined' ? post.company.display_name : 'Unknown',
+                typeof post.location?.display_name !== 'undefined' ? post.location.display_name : 'Unknown',
                 typeof post.created !== 'undefined' ? post.created : 'Unknown',
-                typeof post.category.label !== 'undefined' ? post.category.label : 'Unknown',
+                typeof post.category?.label !== 'undefined' ? post.category.label : 'Unknown',
                 typeof post.description !== 'undefined' ? post.description : 'Unknown',
             ];
         }
     }
 
-    insertSearch(searchTerm) {
+    insertSearch(id, term) {
         try {
-            console.log(this.db.prepare(dbStatements.transactions.insertNewSearch).get(searchTerm).keywords);
-            exit();
+            this.db.prepare(dbStatements.transactions.insertNewSearch).run(id, term);
         }
         catch (SqliteError) {
             if (!this.db.inTransaction) {

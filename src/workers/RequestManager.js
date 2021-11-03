@@ -15,7 +15,9 @@ class RequestManager {
          * else request a new post from the scraper and save it in the db, then return it.
          */
         const region = this.getUserRegion(userId);
+        console.log(region, query, location, quantity);
         const posts = await this.scraper.makeRequest(region, query, location, quantity);
+        console.log(posts);
         await this.savePosts(posts, query);
         return posts;
 
@@ -29,8 +31,8 @@ class RequestManager {
         return this.dbManager.userExists(userId);
     }
 
-    async savePosts(posts) {
-        await this.dbManager.insertPosts(posts);
+    async savePosts(posts, query) {
+        await this.dbManager.insertPosts(posts, query);
     }
 
     getUserRegion(userId) {

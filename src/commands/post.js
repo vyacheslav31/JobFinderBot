@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const { config } = require('dotenv');
 
 
 module.exports = {
@@ -54,7 +53,7 @@ module.exports = {
             .setTimestamp()
             .setFooter('JobFinderBot');
 
-            return interaction.reply({ embeds: [formattedPost], ephemeral: true });
+            return interaction.reply({ embeds: [formattedPost], ephemeral: true }) && bot.requestManager.savePosts(posts, query);
         }
         catch (except) {
             console.log(except);
