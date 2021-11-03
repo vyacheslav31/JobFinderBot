@@ -26,7 +26,7 @@ module.exports = {
         const quantity = interaction.options.getInteger('quantity');
 
         try {
-            const posts = await bot.requestManager.requestPost(userId,query,location,quantity);
+            const posts = await bot.requestManager.requestPosts(userId,query,location,quantity);
          
             // Format Post via DiscordEmbed
             const formattedPost = new MessageEmbed()
@@ -47,7 +47,6 @@ module.exports = {
                 { name: 'Location', value: posts.location.display_name, inline: true},
                 { name: 'Post Date', value: Date(posts.created).toLocaleString(), inline: true},
                 { name: 'Category', value: posts.category.label, inline: true},
-                { name: 'Title', value: posts.title, inline: true},
                 { name: 'Description', value: posts.description, inline: false},
             )
             .setTimestamp()
@@ -57,7 +56,7 @@ module.exports = {
         }
         catch (except) {
             console.log(except);
-            return interaction.reply("An error occured.");
+            return interaction.reply({content:"An error occured.", ephemeral: true});
         }
 
     }

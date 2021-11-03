@@ -1,11 +1,12 @@
 const { Client, Collection, Intents } = require('discord.js');
-const DatabaseManager = require("../storage/db_manager");
-const RequestManager = require("./request_manager");
+const DatabaseManager = require("./DatabaseManager");
+const RequestManager = require("./RequestManager");
+const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const env = require('dotenv');
 const log_dir = '../../log';
-const botConfig = require('../storage/bot_config');
-const apiConfig = require('../storage/api_config');
+const botConfig = require('../storage/bot.config');
+const apiConfig = require('../storage/api.config');
 
 
 class JobFinderBot extends Client {
@@ -32,7 +33,7 @@ class JobFinderBot extends Client {
         // TODO: setup logging
         // Register all available bot commands
         this.registerCommands();
-       
+
         // Affirm ready state
         this.on('ready', () => {
             console.log(`${this.user.tag} is now active!`);
@@ -60,6 +61,15 @@ class JobFinderBot extends Client {
 
             const command = this.commands.get(interaction.commandName);
 
+            if (typeof this.requestManager.userExists(interaction.user.id) == 'undefined' && command.data.name !== 'register') {
+                const formattedMsg = new MessageEmbed()
+                .setColor(this.adzuna.postColor)
+                .setDescription('Please use `/register` first. (We need to know which country to look for job postings in)')
+                .setTimestamp()
+                .setFooter('JobFinderBot');
+                return interaction.reply({ embeds: [formattedMsg], ephemeral: true })
+            }
+
             if (!command) return;
 
             // Attempt to execute user command
@@ -79,11 +89,17 @@ class JobFinderBot extends Client {
             switch (interaction.customId) {
                 case 'region_select':
                     try {
+                        const formattedMsg = new MessageEmbed()
+                            .setColor(this.adzuna.postColor)
+                            .setDescription('Thank you! You have been registered.')
+                            .setTimestamp()
+                            .setFooter('JobFinderBot');
                         this.requestManager.registerUser(interaction.member.user.id, interaction.values[0]);
-                        await interaction.reply({ content: 'You have been registered.', ephemeral: true });
+                        await interaction.update({ embeds: [formattedMsg], components: [], ephemeral: true });
                     }
                     catch (SqliteError) {
                         // TODO: Etheir create an `update` command or overwrite existing country in DB if user re-registers
+                        console.log(SqliteError)
                         await interaction.reply({ content: "You have already been registered.", ephemeral: true });
                     }
             }
