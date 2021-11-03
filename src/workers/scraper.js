@@ -19,7 +19,7 @@ class Scraper {
      * @param {Query [Engineer, Accountant, etc...]} what 
      * @param {Location [City, PostalCode]} where 
      */
-    async makeRequest(country, what, where = '', page = 1, results = 1) {
+    async makeRequest(country, what, where = '', results = 1, page = 1,) {
         what = encodeURIComponent(what.trim());
         where = encodeURIComponent(where.trim());
 
@@ -33,7 +33,7 @@ class Scraper {
             where
         )
         ).then((response) => {
-            return response.data.results[0];
+            return response.data.results;
         });
       
         return posts;

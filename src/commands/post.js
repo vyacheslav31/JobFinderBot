@@ -26,7 +26,7 @@ module.exports = {
         const quantity = interaction.options.getInteger('quantity');
 
         try {
-            const posts = await bot.requestManager.requestPost(userId,query,location,quantity);
+            const posts = await bot.requestManager.requestPosts(userId,query,location,quantity);
          
             // Format Post via DiscordEmbed
             const formattedPost = new MessageEmbed()
@@ -55,6 +55,7 @@ module.exports = {
             return interaction.reply({ embeds: [formattedPost], ephemeral: true });
         }
         catch (except) {
+            console.log(except);
             return interaction.reply({content:"An error occured.", ephemeral: true});
         }
 

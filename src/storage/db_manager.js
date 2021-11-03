@@ -1,6 +1,4 @@
 const Database = require('better-sqlite3');
-const fs = require("fs");
-const path = require("path");
 const { exit } = require('process');
 const dbStatements = require('./db_statements');
 
@@ -39,28 +37,67 @@ class DatabaseManager {
             let preparedStmt = this.db.prepare(dbStatements.transactions.insertNewUser);
             preparedStmt.run(userId + '', country);
         }
-        catch (except) {
+        catch (SqliteError) {
             if (!this.db.inTransaction) {
                 // TODO: LOG SQL ERROR
-                throw except;
+                console.log(SqliteError);
+
             }
         }
     }
 
-    insertPost(post) {
+    async insertPosts(posts, searchTerm) {
+        // Insert Search Term
+        const searchId = this.insertSearch(searchTerm);
+        // Extract Post Data & replace undefined values with 'Unknown's
+        for (const post in posts) {
+            const postData = [
+                post.id,
+                searchId,
+                post.title,
+                typeof post.redirect_url !== 'undefined' ? post.redirect_url : 'Unknown',
+                typeof post.longitude !== 'undefined' ? post.longitude : 'Unknown',
+                typeof post.latitude !== 'undefined' ? post.latitude : 'Unknown',
+                typeof post.company.display_name !== 'undefined' ? post.company.display_name : 'Unknown',
+                typeof post.location.display_name !== 'undefined' ? post.location.display_name : 'Unknown',
+                typeof post.created !== 'undefined' ? post.created : 'Unknown',
+                typeof post.category.label !== 'undefined' ? post.category.label : 'Unknown',
+                typeof post.description !== 'undefined' ? post.description : 'Unknown',
+            ];
+        }
+    }
 
+    insertSearch(searchTerm) {
+        try {
+            console.log(this.db.prepare(dbStatements.transactions.insertSearch).run(searchTerm + ''));
+            process.exit();
+        }
+        catch (SqliteError) {
+            if (!this.db.inTransaction) {
+                // TODO: LOG SQL ERROR
+                console.log(SqliteError);
+
+            }
+        }
     }
 
     getUserRegion(userId) {
+        try {
+            return this.db.prepare(dbStatements.transactions.getUserRegion).get(userId + '').country;
+        }
+        catch (SqliteError) {
+            if (!this.db.inTransaction) {
+                // TODO: LOG SQL ERROR
+                console.log(SqliteError);
 
+            }
+        }
+    
     }
 
     userExists(userId) {
         try {
-            let preparedStmt = this.db.prepare(dbStatements.transactions.userExists);
-            let user = preparedStmt.get(userId);
-            console.log(user)
-            process.exit();
+            return this.db.prepare(dbStatements.transactions.userExists).get(userId);
         }
         catch (except) {
             if (!this.db.inTransaction) {

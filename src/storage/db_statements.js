@@ -7,8 +7,9 @@ module.exports = {
         ],
         transactions : {
                 insertNewUser : 'INSERT INTO users VALUES (?, ?);',
+                insertNewSearch : 'INSERT INTO searches VALUES (?);',
                 insertJobPost : 'INSERT INTO job_postings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-                getUserRegion : 'SELECT country FROM users WHERE user_id = ?',
-                userExists : 'SELECT EXISTS(SELECT 1 FROM users WHERE user_id = ? LIMIT 1);'
+                getUserRegion : 'SELECT country FROM users WHERE user_id = ?;',
+                userExists : 'SELECT user_id FROM users WHERE user_id = ? LIMIT 1;'
         }
 }

@@ -1,6 +1,7 @@
 const { Client, Collection, Intents } = require('discord.js');
 const DatabaseManager = require("../storage/db_manager");
 const RequestManager = require("./request_manager");
+const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const env = require('dotenv');
 const log_dir = '../../log';
@@ -59,8 +60,14 @@ class JobFinderBot extends Client {
             if (!interaction.isCommand()) return;
 
             const command = this.commands.get(interaction.commandName);
-            if (!this.requestManager.userExists(interaction.user.id) && command !== 'register') {
-                return interaction.reply({content: 'You must register first.', ephemeral: true})
+
+            if (typeof this.requestManager.userExists(interaction.user.id) == 'undefined' && command.data.name !== 'register') {
+                const formattedMsg = new MessageEmbed()
+                .setColor(this.adzuna.postColor)
+                .setDescription('Please use `/register` first. (We need to know which country to look for job postings in)')
+                .setTimestamp()
+                .setFooter('JobFinderBot');
+                return interaction.reply({ embeds: [formattedMsg], ephemeral: true })
             }
 
             if (!command) return;
@@ -82,8 +89,13 @@ class JobFinderBot extends Client {
             switch (interaction.customId) {
                 case 'region_select':
                     try {
+                        const formattedMsg = new MessageEmbed()
+                            .setColor(this.adzuna.postColor)
+                            .setDescription('Thank you! You have been registered.')
+                            .setTimestamp()
+                            .setFooter('JobFinderBot');
                         this.requestManager.registerUser(interaction.member.user.id, interaction.values[0]);
-                        await interaction.reply({ content: 'You have been registered.', ephemeral: true });
+                        await interaction.update({ embeds: [formattedMsg], components: [], ephemeral: true });
                     }
                     catch (SqliteError) {
                         // TODO: Etheir create an `update` command or overwrite existing country in DB if user re-registers
