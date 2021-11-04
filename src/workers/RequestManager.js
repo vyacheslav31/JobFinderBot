@@ -30,8 +30,6 @@ class RequestManager {
         return this.dbManager.getUserRegion(userId);
     }
 
-
-
 }
 
 module.exports = RequestManager;

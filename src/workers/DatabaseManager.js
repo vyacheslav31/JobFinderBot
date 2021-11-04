@@ -95,7 +95,7 @@ class DatabaseManager {
 
             }
         }
-    
+
     }
 
     userExists(userId) {
@@ -109,8 +109,6 @@ class DatabaseManager {
             }
         }
     }
-
-
 }
 
 module.exports = DatabaseManager;

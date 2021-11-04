@@ -38,8 +38,8 @@ module.exports = {
                     formattedPost = bot.formatPost(post);
                     return interaction.reply({ embeds: [formattedPost], ephemeral: true }) && bot.requestManager.savePosts(posts, query);
                 default:
-                    // CASE WHERE POSTS > 1
-                    // TODO: Implement this case.
+                // CASE WHERE POSTS > 1
+                // TODO: Implement this case.
             }
         }
         catch (except) {

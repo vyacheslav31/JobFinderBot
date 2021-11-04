@@ -9,7 +9,6 @@ class Scraper {
 
     }
 
-
     /**
      * User-initiated API search which will return the results based on a query.
      * @param {*} country - The country to search in.
