@@ -8,12 +8,7 @@ module.exports = {
 		.setDescription('Register yourself with JobFinderBot.'),
 	/** */
 	async execute(interaction, bot) {
-		const formattedMsg = new MessageEmbed()
-		.setColor(bot.adzuna.postColor)
-		.setDescription('Please select your country from the dropdown menu below.')
-		.setTimestamp()
-		.setFooter('JobFinderBot');
-
+		const formattedMsg = bot.formatMessage('countrySelect');
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
 				.setCustomId('region_select')

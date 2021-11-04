@@ -8,15 +8,8 @@ class RequestManager {
     }
 
     async requestPosts(userId, query, location, quantity) {
-        // logic for submitting requests
-
-        /**
-         * If db_manager can find the post in the db return post
-         * else request a new post from the scraper and save it in the db, then return it.
-         */
         const region = this.getUserRegion(userId);
         const posts = await this.scraper.makeRequest(region, query, location, quantity);
-        await savePosts(posts, query);
         return posts;
 
     }
@@ -29,15 +22,13 @@ class RequestManager {
         return this.dbManager.userExists(userId);
     }
 
-    async savePosts(posts) {
-        await this.dbManager.insertPosts(posts);
+    savePosts(posts, query) {
+        this.dbManager.insertPosts(posts, query);
     }
 
-    async getUserRegion(userId) {
-        await this.dbManager.getUserRegion(userId);
+    getUserRegion(userId) {
+        return this.dbManager.getUserRegion(userId);
     }
-
-
 
 }
 

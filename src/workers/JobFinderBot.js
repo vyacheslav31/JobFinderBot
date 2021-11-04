@@ -1,7 +1,5 @@
-const { Client, Collection, Intents } = require('discord.js');
-const DatabaseManager = require("./DatabaseManager");
+const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const RequestManager = require("./RequestManager");
-const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const env = require('dotenv');
 const log_dir = '../../log';
@@ -60,14 +58,16 @@ class JobFinderBot extends Client {
             if (!interaction.isCommand()) return;
 
             const command = this.commands.get(interaction.commandName);
+            let formattedMsg = null;
+            let userExists = typeof this.requestManager.userExists(interaction.user.id) !== 'undefined'
 
-            if (typeof this.requestManager.userExists(interaction.user.id) == 'undefined' && command.data.name !== 'register') {
-                const formattedMsg = new MessageEmbed()
-                .setColor(this.adzuna.postColor)
-                .setDescription('Please use `/register` first. (We need to know which country to look for job postings in)')
-                .setTimestamp()
-                .setFooter('JobFinderBot');
+            if (!userExists && command.data.name !== 'register') {
+                formattedMsg = this.formatMessage('unregistered');
                 return interaction.reply({ embeds: [formattedMsg], ephemeral: true })
+            }
+            else if (userExists && command.data.name == 'register') {
+                formattedMsg = this.formatMessage('alreadyRegistered');
+                return interaction.reply({ embeds: [formattedMsg], ephemeral: true });
             }
 
             if (!command) return;
@@ -89,25 +89,79 @@ class JobFinderBot extends Client {
             switch (interaction.customId) {
                 case 'region_select':
                     try {
-                        const formattedMsg = new MessageEmbed()
-                            .setColor(this.adzuna.postColor)
-                            .setDescription('Thank you! You have been registered.')
-                            .setTimestamp()
-                            .setFooter('JobFinderBot');
+                        const formattedMsg = this.formatMessage('registerConfirmation');
                         this.requestManager.registerUser(interaction.member.user.id, interaction.values[0]);
                         await interaction.update({ embeds: [formattedMsg], components: [], ephemeral: true });
                     }
                     catch (SqliteError) {
                         // TODO: Etheir create an `update` command or overwrite existing country in DB if user re-registers
                         console.log(SqliteError)
-                        await interaction.reply({ content: "You have already been registered.", ephemeral: true });
                     }
             }
         });
     }
 
+    formatMessage(postType) {
+        let newMessage = new MessageEmbed();
+        let color, description, icon = null;
+
+        switch (postType) {
+            case 'unregistered':
+                color = this.config.messageColors.error;
+                description = this.config.messages.unregistered;
+                icon = this.config.iconUrls.error;
+                break;
+            case 'alreadyRegistered':
+                color = this.config.messageColors.error;
+                description = this.config.messages.alreadyRegistered;
+                icon = this.config.iconUrls.error;
+                break;
+            case 'registerConfirmation':
+                color = this.config.messageColors.success;
+                description = this.config.messages.registerConfirmation;
+                icon = this.config.iconUrls.success;
+                break;
+            case 'countrySelect':
+                color = this.config.messageColors.success;
+                description = this.config.messages.countrySelect;
+                icon = this.config.iconUrls.success;
+                break;
+            case 'postsUnavailable':
+                color = this.config.messageColors.error;
+                description = this.config.messages.postsUnavailable;
+                icon = this.config.iconUrls.error;
+                break;
+        }
+
+        return newMessage
+            .setColor(color)
+            .setDescription(description)
+            .setFooter(this.config.botName, icon);
+    }
+
     formatPost(post) {
-        // TODO: Implement format post method with discord embeds
+        return new MessageEmbed()
+            .setColor(this.adzuna.postColor)
+            .setTitle(post.title)
+            .setAuthor(this.adzuna.name, this.adzuna.icon, this.adzuna.url)
+            .setURL(post.redirect_url)
+            .setThumbnail(this.config.staticMapUrl(
+                post.longitude,
+                post.latitude,
+                this.config.staticMapZoom,
+                this.config.staticMapWidth,
+                this.config.staticMapHeight
+            ))
+            .addFields(
+                { name: 'Map', value: this.config.mapBaseUrl(post.latitude, post.longitude), inline: true },
+                { name: 'Company', value: post.company.display_name, inline: false },
+                { name: 'Location', value: post.location.display_name, inline: true },
+                { name: 'Post Date', value: Date(post.created).toLocaleString(), inline: true },
+                { name: 'Category', value: post.category.label, inline: true },
+                { name: 'Description', value: post.description, inline: false },
+            )
+            .setTimestamp()
+            .setFooter(this.config.botName);
     }
 }
 

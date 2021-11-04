@@ -2,8 +2,7 @@ module.exports = {
     Adzuna: {
         name: "Adzuna",
         url: "https://www.adzuna.com",
-        icon: "https://i.ibb.co/ryxpxNC/adzuna-logo.png",
-        postColor: "0x20873c",
+        logo: "https://i.ibb.co/ryxpxNC/adzuna-logo.png",
         regions: [
             {label:"Great Britain", value:"gb"},
             {label:"Austria", value:"at"},
