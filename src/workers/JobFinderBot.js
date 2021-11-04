@@ -103,39 +103,40 @@ class JobFinderBot extends Client {
 
     formatMessage(postType) {
         let newMessage = new MessageEmbed();
+        let color, description, icon = null;
+
         switch (postType) {
             case 'unregistered':
-                newMessage
-                    .setColor(this.config.messageColors.error)
-                    .setDescription(this.config.messages.unregistered)
-                    .setFooter(this.config.botName, this.config.iconUrls.error);
+                color = this.config.messageColors.error;
+                description = this.config.messages.unregistered;
+                icon = this.config.iconUrls.error;
                 break;
             case 'alreadyRegistered':
-                newMessage
-                    .setColor(this.config.messageColors.error)
-                    .setDescription(this.config.messages.alreadyRegistered)
-                    .setFooter(this.config.botName, this.config.iconUrls.error);
+                color = this.config.messageColors.error;
+                description = this.config.messages.alreadyRegistered;
+                icon = this.config.iconUrls.error;
                 break;
             case 'registerConfirmation':
-                newMessage
-                    .setColor(this.config.messageColors.success)
-                    .setDescription(this.config.messages.registerConfirmation)
-                    .setFooter(this.config.botName, this.config.iconUrls.success);
+                color = this.config.messageColors.success;
+                description = this.config.messages.registerConfirmation;
+                icon = this.config.iconUrls.success;
                 break;
             case 'countrySelect':
-                newMessage
-                    .setColor(this.config.messageColors.success)
-                    .setDescription(this.config.messages.countrySelect)
-                    .setFooter(this.config.botName, this.config.iconUrls.success);
+                color = this.config.messageColors.success;
+                description = this.config.messages.countrySelect;
+                icon = this.config.iconUrls.success;
                 break;
             case 'postsUnavailable':
-                newMessage
-                    .setColor(this.config.messageColors.error)
-                    .setDescription(this.config.messages.postsUnavailable)
-                    .setFooter(this.config.botName, this.config.iconUrls.error);
+                color = this.config.messageColors.error;
+                description = this.config.messages.postsUnavailable;
+                icon = this.config.iconUrls.error;
                 break;
         }
-        return newMessage;
+
+        return newMessage
+            .setColor(color)
+            .setDescription(description)
+            .setFooter(this.config.botName, icon);
     }
 
     formatPost(post) {
@@ -160,7 +161,7 @@ class JobFinderBot extends Client {
                 { name: 'Description', value: post.description, inline: false },
             )
             .setTimestamp()
-            .setFooter('JobFinderBot');
+            .setFooter(this.config.botName);
     }
 }
 
