@@ -5,6 +5,7 @@ const env = require('dotenv');
 const log_dir = '../../log';
 const botConfig = require('../storage/bot.config');
 const apiConfig = require('../storage/api.config');
+const help = require('../commands/help');
 
 
 class JobFinderBot extends Client {
@@ -103,9 +104,9 @@ class JobFinderBot extends Client {
 
     formatMessage(postType) {
         let newMessage = new MessageEmbed();
-        let color, description, icon = null;
-
-        switch (postType) {
+        let color, description, icon = null;        
+    
+        switch (postType) {            
             case 'unregistered':
                 color = this.config.messageColors.error;
                 description = this.config.messages.unregistered;
@@ -131,12 +132,20 @@ class JobFinderBot extends Client {
                 description = this.config.messages.postsUnavailable;
                 icon = this.config.iconUrls.error;
                 break;
+            case 'helpCommand':                
+                color = this.config.messageColors.success;
+                description = this.config.messages.helpCommand;
+                icon = this.config.iconUrls.success;                          
+                newMessage
+                .setFields(this.config.messages.commands)                                   
+                break;
         }
-
+              
         return newMessage
             .setColor(color)
-            .setDescription(description)
+            .setDescription(description)        
             .setFooter(this.config.botName, icon);
+        
     }
 
     formatPost(post) {
@@ -162,6 +171,23 @@ class JobFinderBot extends Client {
             )
             .setTimestamp()
             .setFooter(this.config.botName);
+    }
+
+    formatHelpMessage() {
+        const file = new MessageAttachment('./resources/img/JobFinderBot-02.png');
+        return messageEmbed = new MessageEmbed()
+        .setTitle("Bot Commands")  
+        .setDescription("List of available commands.")
+        .setColor(bot.adzuna.postColor)
+        //.setThumbnail('attachment://JobFinderBot-02.png')
+        .setFields(
+            {name: '/post', value: this.config.registerDescription, inline: true}, 
+            {name: '/register', value: this.config.postDescription, inline: true}
+        )
+        .setAuthor(bot.adzuna.name, bot.user.displayAvatarURL(), bot.adzuna.url)
+        .setTimestamp()
+        .setFooter('JobFinderBot');
+
     }
 }
 

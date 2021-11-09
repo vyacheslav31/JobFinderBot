@@ -23,5 +23,8 @@ module.exports = {
         registerConfirmation: 'Thank you! You have been registered.',
         postsUnavailable: 'Sorry, we couldn\'t find any posts. Try searching for something else.',
         countrySelect: 'Please select your country from the dropdown menu below.',
+        helpCommand: 'Available bot commands.',
+        commands: [{name: '/post', value: 'Calls the Adzuna API for a new job posting to be displayed if the user.\'s registered.', inline: true}, 
+        {name: '/register', value: 'Allows you to set your country through a dropdown menu to call the Adzuna API.', inline: true}],
     },
 }

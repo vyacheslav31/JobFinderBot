@@ -8,20 +8,8 @@ module.exports = {
         .setName('help')
         .setDescription('Available bot commands'),
     async execute(interaction, bot) {
-        const file = new MessageAttachment('./resources/img/JobFinderBot-02.png');
-        const messageEmbed = new MessageEmbed()
-        .setTitle("Bot Commands")  
-        .setDescription("List of available commands.")
-        .setColor(bot.adzuna.postColor)
-        .setThumbnail('attachment://JobFinderBot-02.png')
-        .setFields(
-            {name: '/post', value: `${postDesc}`, inline: true}, 
-            {name: '/register', value: `${registerDesc}`, inline: true}
-        )
-        .setAuthor(bot.adzuna.name, bot.user.displayAvatarURL(), bot.adzuna.url)
-        .setTimestamp()
-        .setFooter('JobFinderBot');
-     
-        return interaction.reply( { embeds: [messageEmbed], files: [file] , ephemeral: true });
+        const formattedMsg = bot.formatMessage('helpCommand');
+        
+        return interaction.reply( { embeds: [formattedMsg] , ephemeral: true });
         },
 };
